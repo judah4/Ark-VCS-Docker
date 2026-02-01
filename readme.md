@@ -19,7 +19,7 @@ In this executable you have:
 Currently we support 3 platforms:
 	- Windows x64
 	- Linux x64
-	- MacOS Intel (Works on Arm)
+	- MacOS Universal
 
 ## Server
 
@@ -37,8 +37,6 @@ There's 2 ways to launch Ark as a client application:
 	- Run ark gui
 
 Since version 0.2.0, there's an option to create Workspaces with built-in servers. This means that when you open the client application, those servers get launched automatically for you.
-
-*Note:* Currently Client Application is only available in Windows.
 
 Please check https://ark-vcs.com/documentation.html for more detailed information about how to use the client application.
 
@@ -72,7 +70,7 @@ Ark's license model is tied to seats - which mean unique connected users - on th
 
 To find out more about our licenses or if you're interested in getting more seats please visit https://ark-vcs.com/pricing.html. 
 
-Ark is still heavily in development, so expect new releases delivering more functionalities. You can check what's the current short term roadmap in https://ark-vcs.com/roadmap.html.
+Ark is still heavily in development, so expect new releases delivering more functionalities.
 
 I'd recommend checking https://ark-vcs.com/documentation.html for more comprehensive documentation.
 

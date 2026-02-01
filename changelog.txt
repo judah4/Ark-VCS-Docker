@@ -1,3 +1,127 @@
+0.13.4 (2026/01/13)
+- Fixed memory bug when freeing usernames / emails while syncing the admin log
+- Fixed crash if Debug menu was opened without any workspace
+
+--------
+
+0.13.3 (2025/11/25)
+- Fixed edge case with Get Changelist / Latest and newly added files that had been shelved but not yet committed being marked as with conflicts and deleted
+- Fixed edge case with Get Changelist / Latest which was supposed to delete a file but that file was already locally deleted
+- Fixed issues with selection not being properly handled after a reconcile that destroys and recreates the workspace files
+- Fixed shelve window not allowing you to shelve if there was a newer version / conflicts of a file
+- Fixed integrity check gui not properly showing all the changelists when we had run already an integrity check, committed a changelist, and ran another integrity check
+- Changed built-in servers to setup using 127.0.0.1 instead of localhost because of the connection slowdown in Windows if the machine has ipv6 setup
+- Refactored how workspace files are managed in preparation for future work with multi-threading
+
+--------
+
+Version 0.13.2 (2025/11/15)
+- Upgraded network version to 4 in order to force everybody to upgrade to this version if the server was upgraded
+- Added support for OS notifications for when you edit a file that gets automatically locked to inform you if you didn't get the lock ownership and prevent data loss
+- MacOS app now renamed to Ark-Vcs.app instead of Ark Vcs.app in order to make it a better citizen for the command line
+- MacOS now brings only Ark-Vcs.app because of entitlements needed for notifications. If you need to use the binary directly you can access it via Ark-Vcs.app/Contents/MacOS/ark
+- Diff panel now also displays added files. If you revert it on the panel, the file will be deleted
+- Fixed bug with purging old cached changelist revisions / manifests / chunks when upgrading data versions. When upgrading to 0.13.2 it will force this process to run to make sure it clears the data for you and you don't have to wait for the next data version upgrade (reason for network version upgrade)
+- Fixed bug with shelving folders and not committing them explicitly when committing files / folders inside that folder (reason for network version upgrade)
+- Updated preferences' panel open with tooltips / hints to reference [text], [image] and [binary] patterns to open based on file content type
+- Fixed Linux trying to open explorer on files would instead open those files (also fixed the context open showing as "(Unknown)", now shows "Explorer")
+- Fixed Linux / MacOS not preventing multiple instances of Ark running on the server folder / workspace folders
+- Linux X11 window now gets set window class "Ark-Vcs" to allow certain window managers to identify Ark windows 
+- Fixed how apps are being launched in MacOS, added a special case for p4merge.app because it receives parameters in a different way
+- Fixed diff panel bug that didn't reset properly when switching between files (e.g. selecting a binary after it had a text file selected)
+- Fixed bug with admin log not saving after a data version upgrade
+- Fixed incorrect label on admin log panel for white/blacklist entries removed
+
+--------
+
+Version 0.13.1 (2025/10/24)
+- Added nocommit support to workspace changelists, it works via adding #+nocommit in the workspace changelist's comment (can also be added / removed via context menu)
+- Set/Clear No Commit context menu option now works on all selected files, not just the hovered one
+- Explicit no commit on newly added files now persists between launches
+- Fixed icon not properly set on windows' executable
+
+--------
+
+Version 0.13.0 (2025/10/19)
+- Upgraded data version to 8
+- Upgraded network version to 3
+- Added No Commit feature, that allows you to flag files to not be able to be committed. This is useful to prevent committing your temporary local changes that aren't meant to be committed 
+- No commit support in text files, if you write <hash>nocommit (i.e. #+nocommit) they'll be flagged as no commit (it is a client side feature, so you can change the keyword <hash>nocommit to anything else)
+- No commit explicit support, you can right click on a file and flag it as No Commit. This is more meant to be used by binary files, however it is commulative with in file <hash>nocommit
+- Files content is now identified as text or binary, and the file icon will reflect that
+- There's new [text], [image] and [binary] patterns that can be used to setup open with entries in the preferences
+- Preferences are now pre-filled with options on each platform when ark is first launched
+- GUI's log panel no longer works in a "filtered mode". The reason for this change is that once you start uploading / downloading a lot of data it would flood the memory logger with debug messages, but if we're not showing them it would push all the messages the memory logger had out, making it look like the log is broken but it was in fact just filled with debug entries which we weren't seeing. Now if the log passes your chosen filter level they are in the log, otherwise ignored
+- Server cli now has a -use_ipv6 argument (defaults to false) since specifically Windows is very fiddly with this, so some times it would default to ipv6 and then you wouldn't be able to connect (you can also change it in Server Configuration). Something to note is that it seems that if your Windows is prefering ipv6 connections, connecting to 'localhost' using ipv4 makes it slower to connect. If you're just using built-in server without connecting from another machine, I recommend turning ipv6 on or changing your connection's host to 127.0.0.1 since it will make the client connect faster to the built-in server
+- Server cli now has a -firewall_enabled argument (defaults to true, you can also change it in Server Configuration)
+- Clients now send a heartbeat to the server when idle, so that the server can disconnect clients that have gone to sleep without disconnecting
+- Removed "Show Console" for built-in server given that this feature would only work with Windows, if you want to check the built-in server's log simply right-click on the log panel and select Built-In Server -> Open Log With
+- Linux gui now will try to use zenity, kdialog or yad to select files / folders
+- Ssl connection failures no longer trigger blacklisting of ips, since in some situations actual users could trigger one and be blacklisted
+- Fixed built-in server's standard out potentially being used by another file (when it happens, it tended to be ark_server.cfg given that it is the first file opened after closing the console and also it was a file that we just keep open while the server is running)
+- Fixed imgui crash when rendering the changes panel in certain conditions
+- Fixed merged files that had no local changes being flagged as having conflicts
+- Fixed syncing shelves with different comments
+- Fixed syncing committed shelves flagging them as committed which would prevent them from syncing correctly
+- Binaries are now normalized to be ark(.exe) for the version with everything and ark-cli(.exe) for the version without gui (i.e. only cli and server)
+- Corrected Eula to reference that seats apply to unique users and that the default number of seats without license is 3
+
+--------
+
+Version 0.12.1 (2025/09/22)
+- Fixed git import on Linux and MacOS
+- Improved built-in server shutdown on Linux and MacOS
+- Fixed incorrect size of tags in history view
+- Fixed imgui settings not being saved. They are now bundled with ark_gui.ini
+- Removed cli git-import and git-import-list commands for now, since they were disabled because of the new gui git import
+
+--------
+
+Version 0.12.0 (2025/09/21)
+- Linux gui application beta! It's released for now as a separate binary (ark-linux-gui), we'll see on how it will progress depending on the stability
+- MacOS binary / app is now a Universal, which means it has both x86 and arm versions inside
+- Added new git import wizard in gui. Allows you to choose a branch, import users, commits and tags. It also keeps the original commit times
+- Fixed windows servers not being able to receive connections via ipv4
+- Context menu of the workspace changelist now allows you to diff all files in it that are modified
+- Context menu of a modified file will now allow you to diff all selected files that are also modified
+- Fixed shutting down of built-in server not flushing its log in Linux and MacOS
+- Fixed server not flushing the config file which could cause it to not be written in Linux and MacOS
+- Upgraded imgui, now there's a much better text rendering
+- Upgraded mbedtls
+- Upgraded Jai
+
+--------
+
+Version 0.11.0 (2025/08/25)
+- Added ability to remove files from shelves (accessible via context menu on the file)
+- Added server integrity check which when run will load all data of the committed changelits to ensure that there is no data corruption. By default, whenever the server is upgraded to a newer Ark version it will run it, but you can disable this behaviour in the server configuration (check below). It is recommended that even if you don't upgrade Ark to run it once in a while to ensure that there's no problem with your server / disks. Please remember to still do your backups, specially before upgrading Ark versions.
+- Added server "firewall", which allows you to whitelist / blacklist ips. It also automatically blacklists ips that perform some illegal actions
+- Added ability to filter log by level (debug, info, warning and error). Moving forward it will start to default to info to be less verbose than it has been so far (Keep in mind that this is just filtering what goes to the gui logger / console, the log file will still write everything)
+- Added server configuration, which allows client to remotely change some settings (the port, check integrity condition, logging level and firewall enabled)
+- Server now assigns itself a unique id to help identify cases where the same workspace was connected to different server, which would corrupt the workspace since it had different projects / branches / cls / assets / etc
+- Network serialization updated to use the same system introduced in 0.10.0
+- Network now has a version number to be able to gracefully disconnect clients that connect using a version that is incompatible with the one running on the server
+- Restricted data version to 7 in order to cull old serialization
+- Shelve window now shows you when the shelf has some files but they are currently on another workspace changelist. This will also be flagged in their tooltip. Note: at this time it's a known issue that shift select cannot select ranges on these files
+- Shelve window now has 2 checkboxes, that allow you to revert and unlock files after they have been shelved (note that if files are not in that shelf's workspace changelist or they are not checked to shelf these operations will not be performed)
+- Shelf context menu now has Unshelve Latest which allows you to unshelve the latest at any time instead of Get Latest which only allowed you to unshelve the latest if you didn't have that version. This is specially useful for when you revert all the shelf's files and want to go back to it without opening its window (but you can still do it that way if you prefer, which allows you to unshelve any revision)
+- Added new cli print command that allows you to print changelists, assets and users
+- Added new cli get-latest command, which is basically an alias for get -cl latest
+- Cli get command now prints some progress information
+- Fixed cli commands being executed before the project is synced, which would force you to run the same command twice (e.g. cli get command)
+- Added preference to set a custom file explorer (e.g. File Pilot)
+- Fixed shelving window not properly displaying the status of files (i.e. darken them if they have no changes compared to the shelved version)
+- Fixed potential crash when committing
+- Fixed bug that would cause files that should be copied (i.e. Download Changes) to fail copying because their folder did not exist
+- Fixed crash if there wasn't a username set in the changelist when inspecting its details
+- Fixed layout of buttons in delete and revert windows
+- Fixed the comment of a cl being committed not being updated when it was already fully shelved but comment was changed on commit
+- Fixed bug in serialization of the vault.db (nothing serious, it would just ask you to login with password when it shouldn't)
+- Fixed new server not properly setting listening port to the default port if no port was passed
+- Fixed open url / email not working in MacOS
+
+--------
+
 Version 0.10.1 (2025/07/03)
 - Fixed preferences not being saved
 - Fixed commit / shelve window not setting the input on the comment

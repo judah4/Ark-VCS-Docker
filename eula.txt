@@ -5,7 +5,7 @@ The SOFTWARE PRODUCT (ARK) is protected by copyright laws and international copy
   ARK is licensed as follows:
   a. Installation and Usage.
   	Running ARK as client requires no license and can be used freely.
-  	Running ARK as server requires a license to grant seats, which define the number of concurrent clients that may connect connect to it. If an ARK server has no license, the seat limit is set to 1.
+  	Running ARK as server requires a license to grant seats, which define the number of concurrent users that may connect connect to it. If an ARK server has no license, the seat limit is set to 3.
   	License may be installed in multiple servers, so long as they belong to the Licensee.
   b. Backup Copies.
     You may make copies of the license key and or ARK for backup and archival purposes.
