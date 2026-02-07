@@ -1,3 +1,21 @@
+0.13.7 (2026/02/02)
+- Fixed fs cache not being saved, which would cause long reconciles upon launching Ark
+- Fixed crash when trying to allocate memory for > 1M files
+
+--------
+
+0.13.6 (2026/01/31)
+- Fixed diff-ing from inside Unreal Engine
+- Fixed crash when show in files was used
+- Fixed potential crash in check integrity process
+
+--------
+
+0.13.5 (2026/01/26)
+- Fixed memory crash in workspaces with hundreds of thousands of files
+
+--------
+
 0.13.4 (2026/01/13)
 - Fixed memory bug when freeing usernames / emails while syncing the admin log
 - Fixed crash if Debug menu was opened without any workspace
